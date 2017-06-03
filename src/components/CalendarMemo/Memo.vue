@@ -28,12 +28,13 @@ export default {
   height: 480px;
   background-color: #E35D5B;
   position: absolute;
-  top: -40px;
+  top: -30px;
   right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 5px 10px 20px rgba(277,93,91,0.3)
 }
 .date-container {
   text-align: center;
