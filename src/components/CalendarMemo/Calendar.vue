@@ -35,7 +35,7 @@ export default {
   },
   mounted () {
     const index = this.weekdays.indexOf(this.moment(`${this.dateInfo.year}-${this.dateInfo.monthIndex}-1`).format('dddd').substring(0, 2))
-    this.$refs.date[0].style.marginLeft = (38 * index) + 'px'
+    this.$refs.date[0].style.marginLeft = (37 * index) + 'px'
   },
   computed: {
     daysInMonth () {

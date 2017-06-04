@@ -1,7 +1,7 @@
 <template>
   <div class='wrapper'>
     <calendar :dateInfo='dateInfo' @changeDate='changeDate'></calendar>
-    <memo :dateInfo='dateInfo'></memo>
+    <memo :dateInfo='dateInfo' :memos='memos' @addMemo='addMemo'></memo>
   </div>
 </template>
 
@@ -24,13 +24,23 @@ export default {
         monthIndex: moment().format('MM'),
         day: moment().format('dddd'),
         year: moment().format('YYYY')
-      }
+      },
+      memos: {}
     }
   },
   methods: {
     changeDate (date) {
       this.dateInfo.date = date
       this.dateInfo.day = moment(`${this.dateInfo.year}-${this.dateInfo.monthIndex}-${this.dateInfo.date}`).format('dddd')
+    },
+    addMemo (memo) {
+      let key = `${this.dateInfo.year}-${this.dateInfo.monthIndex}-${this.dateInfo.date}`
+      this.memos[key] = this.memos[key] || []
+      this.memos[key].push({
+        name: memo,
+        completed: false
+      })
+      this.memos = Object.assign({}, this.memos)
     }
   }
 }
