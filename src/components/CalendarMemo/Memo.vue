@@ -9,7 +9,8 @@
       <div class='day'>{{ dateInfo.day}}</div>
     </div>
     <div class='memo-container'>
-      <div class='memo' v-if='currentDateMemo' v-for='memo in currentDateMemo'>
+      <div class='title' v-if='currentDateMemo'>{{ currentDateMemo.length }} Item{{currentDateMemo.length !== 1 ? 's' : ''}}</div>
+      <div class='memo' :class='{"completed": memo.completed}' v-if='currentDateMemo' v-for='memo in currentDateMemo' @click='toggleMemoState(memo)'>
         <div class='tick'>&bullet;</div>
         <div class='text'>{{ memo.name }}</div>
       </div>
@@ -51,6 +52,9 @@ export default {
     addMemo () {
       this.$emit('addMemo', this.memo)
       this.memo = ''
+    },
+    toggleMemoState (memo) {
+      this.$emit('toggleMemoState', memo)
     }
   },
   computed: {
@@ -72,19 +76,16 @@ export default {
   right: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   box-shadow: 5px 10px 20px rgba(277,93,91,0.3);
   position: relative;
 }
 .input-container {
-  position: absolute;
-  top: 10px;
   width: 100%;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
 }
 .input {
   background: none;
@@ -113,7 +114,12 @@ export default {
 .date-container {
   text-align: center;
   color: #fff;
-  margin-bottom: 20px;
+  margin: 20px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .date {
   font-size: 6em;
@@ -126,23 +132,22 @@ export default {
 }
 .memo-container {
   width: 80%;
-  height: 100px;
+  height: 170px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  /*overflow-y: scroll;*/
+  margin: 15px auto;
+}
+.memo-container .title {
+  color: #eee;
+  margin: 5px 0;
 }
 .memo {
   display: flex;
   align-items: center;
   color: #eee;
   width: 100%;
-  margin: 5px auto;
   cursor: pointer;
-}
-.memo:hover {
-  opacity: 0.8;
 }
 .memo .text {
   overflow: hidden;
@@ -153,6 +158,12 @@ export default {
   margin-right: 10px;
   color: rgba(255,255,255,0.4);
   font-size: 1.5em;
+}
+.memo.completed {
+  opacity: 0.4;
+}
+.memo.completed .text {
+  text-decoration: line-through;
 }
 .no-memo {
   color: #eee;

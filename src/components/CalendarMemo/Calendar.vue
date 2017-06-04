@@ -8,7 +8,7 @@
       <div class='dates'>
         <div 
         class="date"
-        :class='{"today": isToday(addZero(date)), "faded": hasPassed(date), "selected": dateInfo.date === addZero(date)}'
+        :class='{"today": isToday(addZero(date)), "faded": hasPassed(date), "selected": dateInfo.date === addZero(date), "memo": hasMemo(addZero(date))}'
         v-for='date in daysInMonth'
         @click='selectDate(addZero(date))'
         ref='date'>
@@ -25,7 +25,8 @@ import moment from 'moment'
 export default {
   name: 'calendar',
   props: {
-    dateInfo: Object
+    dateInfo: Object,
+    memos: Object
   },
   data () {
     return {
@@ -59,6 +60,10 @@ export default {
     },
     selectDate (date) {
       this.$emit('changeDate', date)
+    },
+    hasMemo (date) {
+      let key = `${this.dateInfo.year}-${this.dateInfo.monthIndex}-${date}`
+      if (this.memos[key] && this.memos[key].length > 0) return true
     }
   }
 }
@@ -118,6 +123,7 @@ export default {
   z-index: 10;
   cursor: pointer;
   margin-bottom: 5px;
+  position: relative;
 }
 .date.today {
   width: 34px;
@@ -136,5 +142,15 @@ export default {
 .date:hover:not(.selected) {
   background-color: #eee;
   border-radius: 50%;
+}
+.date.memo::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background-color: #E35D5B;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 3px;
+  left: 16px;
 }
 </style>

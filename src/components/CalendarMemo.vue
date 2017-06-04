@@ -1,7 +1,7 @@
 <template>
   <div class='wrapper'>
-    <calendar :dateInfo='dateInfo' @changeDate='changeDate'></calendar>
-    <memo :dateInfo='dateInfo' :memos='memos' @addMemo='addMemo'></memo>
+    <calendar :dateInfo='dateInfo' @changeDate='changeDate' :memos='memos'></calendar>
+    <memo :dateInfo='dateInfo' :memos='memos' @addMemo='addMemo' @toggleMemoState='toggleMemoState'></memo>
   </div>
 </template>
 
@@ -28,6 +28,9 @@ export default {
       memos: {}
     }
   },
+  created () {
+    this.memos = JSON.parse(window.localStorage.getItem('memos')) || {}
+  },
   methods: {
     changeDate (date) {
       this.dateInfo.date = date
@@ -41,6 +44,11 @@ export default {
         completed: false
       })
       this.memos = Object.assign({}, this.memos)
+      window.localStorage.setItem('memos', JSON.stringify(this.memos))
+    },
+    toggleMemoState (memo) {
+      memo.completed = !memo.completed
+      window.localStorage.setItem('memos', JSON.stringify(this.memos))
     }
   }
 }
