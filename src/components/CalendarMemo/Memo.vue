@@ -1,8 +1,8 @@
 <template>
   <div class='wrapper'>
     <div class='date-container'>
-      <div class='date'>{{ removeZero(date.date) }}</div>
-      <div class='day'>{{ date.day}}</div>
+      <div class='date'>{{ removeZero(dateInfo.date) }}</div>
+      <div class='day'>{{ dateInfo.day}}</div>
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 export default {
   name: 'memo',
   props: {
-    date: Object
+    dateInfo: Object
   },
   methods: {
     removeZero (num) {

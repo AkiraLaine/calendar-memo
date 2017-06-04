@@ -21,6 +21,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  user-select: none;
 }
 #app {
   width: 100vw;

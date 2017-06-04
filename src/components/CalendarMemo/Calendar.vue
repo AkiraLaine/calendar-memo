@@ -1,12 +1,19 @@
 <template>
   <div class='wrapper'>
     <div class='calendar'>
-      <div class='month'>{{ date.month }}</div>
+      <div class='month'>{{ dateInfo.month }}</div>
       <div class='weekdays'>
         <div class='day' :class='{"weekend": day.indexOf("S") > -1}' v-for='day in weekdays'>{{ day.toLowerCase() }}</div>
       </div>
       <div class='dates'>
-        <div class="date" :class='{"today": isToday(addZero(date)), "faded": hasPassed(date)}' v-for='date in daysInMonth'>{{ addZero(date) }}</div>
+        <div 
+        class="date"
+        :class='{"today": isToday(addZero(date)), "faded": hasPassed(date), "selected": dateInfo.date === addZero(date)}'
+        v-for='date in daysInMonth'
+        @click='selectDate(addZero(date))'
+        ref='date'>
+          {{ addZero(date) }}
+        </div>
       </div>
     </div>
   </div>
@@ -18,7 +25,7 @@ import moment from 'moment'
 export default {
   name: 'calendar',
   props: {
-    date: Object
+    dateInfo: Object
   },
   data () {
     return {
@@ -26,9 +33,13 @@ export default {
       weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
     }
   },
+  mounted () {
+    const index = this.weekdays.indexOf(this.moment(`${this.dateInfo.year}-${this.dateInfo.monthIndex}-1`).format('dddd').substring(0, 2))
+    this.$refs.date[0].style.marginLeft = (38 * index) + 'px'
+  },
   computed: {
     daysInMonth () {
-      return this.moment(`${this.date.year}-${this.date.month}`).daysInMonth()
+      return this.moment(`${this.dateInfo.year}-${this.dateInfo.month}`).daysInMonth()
     }
   },
   methods: {
@@ -38,13 +49,16 @@ export default {
     },
     isToday (date) {
       let dateArray = new Date().toString().split(' ')
-      if (this.date.month.indexOf(dateArray[1]) > -1 && date === dateArray[2]) {
+      if (this.dateInfo.month.indexOf(dateArray[1]) > -1 && date === dateArray[2]) {
         return true
       }
     },
     hasPassed (date) {
       let currentDate = Number(new Date().toString().split(' ')[2])
       if (Number(date) < currentDate) return true
+    },
+    selectDate (date) {
+      this.$emit('changeDate', date)
     }
   }
 }
@@ -97,26 +111,30 @@ export default {
   font-size: 1.1em;
   color: #333;
   width: 35px;
+  height: 35px;
   text-align: center;
   margin-right: 3px;
   position: relative;
   z-index: 10;
+  cursor: pointer;
+  margin-bottom: 5px;
 }
 .date.today {
-  color: #fff;
-}
-.date.today::after {
-  content: '';
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 3px;
+  border: 1px solid #E35D5B;
+}
+.date.selected {
+  color: #fff;
   background-color: #E35D5B;
-  z-index: -1;
+  border-radius: 50%;
 }
 .date.faded {
   color: #ddd;
+}
+.date:hover:not(.selected) {
+  background-color: #eee;
+  border-radius: 50%;
 }
 </style>
