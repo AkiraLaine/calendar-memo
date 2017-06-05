@@ -50,8 +50,10 @@ export default {
       this.$refs.input.focus()
     },
     addMemo () {
-      this.$emit('addMemo', this.memo)
-      this.memo = ''
+      if (this.memo) {
+        this.$emit('addMemo', this.memo)
+        this.memo = ''
+      }
     },
     toggleMemoState (memo) {
       this.$emit('toggleMemoState', memo)
