@@ -9,7 +9,6 @@
       <div class='day'>{{ dateInfo.day}}</div>
     </div>
     <div class='memo-container'>
-      <div class='title' v-if='currentDateMemo'>{{ currentDateMemo.length }} Item{{currentDateMemo.length !== 1 ? 's' : ''}}</div>
       <div class='memo' :class='{"completed": memo.completed}' v-if='currentDateMemo' v-for='memo in currentDateMemo' @click='toggleMemoState(memo)'>
         <div class='tick'>&bullet;</div>
         <div class='text'>{{ memo.name }}</div>
@@ -134,11 +133,24 @@ export default {
 }
 .memo-container {
   width: 80%;
-  height: 170px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-height: 170px;
+  max-height: 170px;
   margin: 15px auto;
+  overflow: hidden;
+  text-align: center;
+}
+.memo-container:hover {
+  overflow-y: auto;
+}
+.memo-container::-webkit-scrollbar {
+  width: 5px;
+}
+.memo-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.memo-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 10px;
 }
 .memo-container .title {
   color: #eee;
@@ -148,7 +160,7 @@ export default {
   display: flex;
   align-items: center;
   color: #eee;
-  width: 100%;
+  width: 90%;
   cursor: pointer;
 }
 .memo .text {
