@@ -1,7 +1,7 @@
 <template>
   <div class='wrapper'>
     <calendar :dateInfo='dateInfo' @changeDate='changeDate' :memos='memos'></calendar>
-    <memo :dateInfo='dateInfo' :memos='memos' @addMemo='addMemo' @toggleMemoState='toggleMemoState'></memo>
+    <memo :dateInfo='dateInfo' :memos='memos' @addMemo='addMemo' @toggleMemoState='toggleMemoState' @deleteMemo='deleteMemo'></memo>
   </div>
 </template>
 
@@ -48,6 +48,17 @@ export default {
     },
     toggleMemoState (memo) {
       memo.completed = !memo.completed
+      window.localStorage.setItem('memos', JSON.stringify(this.memos))
+    },
+    deleteMemo (memo) {
+      Object.keys(this.memos).forEach(date => {
+        this.memos[date].forEach((m, i) => {
+          if (m.name === memo.name) {
+            this.memos[date].splice(i, 1)
+          }
+          if (this.memos[date].length === 0) delete this.memos[date]
+        })
+      })
       window.localStorage.setItem('memos', JSON.stringify(this.memos))
     }
   }

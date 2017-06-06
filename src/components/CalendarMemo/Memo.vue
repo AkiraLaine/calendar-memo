@@ -12,6 +12,7 @@
       <div class='memo' :class='{"completed": memo.completed}' v-if='currentDateMemo' v-for='memo in currentDateMemo' @click='toggleMemoState(memo)'>
         <div class='tick'>&bullet;</div>
         <div class='text'>{{ memo.name }}</div>
+        <div class='delete' @click.stop='deleteMemo(memo)'><span style="margin-top:-2px">x</span></div>
       </div>
       <div class='no-memo' v-if='!currentDateMemo'>No memo's for this day</div>
     </div>
@@ -31,14 +32,6 @@ export default {
       memo: ''
     }
   },
-  watch: {
-    memos: {
-      handler (val) {
-        console.log(val)
-      },
-      deep: true
-    }
-  },
   methods: {
     removeZero (num) {
       if (num[0] === '0') return num.substring(1)
@@ -56,6 +49,9 @@ export default {
     },
     toggleMemoState (memo) {
       this.$emit('toggleMemoState', memo)
+    },
+    deleteMemo (memo) {
+      this.$emit('deleteMemo', memo)
     }
   },
   computed: {
@@ -162,18 +158,40 @@ export default {
   color: #eee;
   width: 90%;
   cursor: pointer;
+  position: relative;
 }
 .memo .text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 80%;
 }
 .memo .tick {
   margin-right: 10px;
   color: rgba(255,255,255,0.4);
   font-size: 1.5em;
 }
-.memo.completed {
+.memo .delete {
+  margin-left: auto;
+  color: #E35D5B;
+  background-color: #fff;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 0.9em;
+  opacity: 0.8;
+  visibility: hidden;
+}
+.memo:hover .delete {
+  visibility: visible;
+}
+.memo .delete:hover {
+  opacity: 1;
+}
+.memo.completed .tick, .memo.completed .text {
   opacity: 0.4;
 }
 .memo.completed .text {
